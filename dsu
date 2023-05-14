@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int mod = 998244353;
+
+const int N = 1e5+10;
+int parent[N];
+int size[N];
+int nodecount[N];
+int edgecount[N];
+
+void make(int v){
+	parent[v] = v;
+	nodecount[v]=1;
+	size[v]=1;
+}
+
+int find(int v){
+	if(parent[v]==v)return v;
+	return find(parent[v]);
+}
+
+void unionn(int a,int b){
+	a = find(a);
+	b = find(b);	
+	edgecount[a]++;
+	if(a==b)return;
+	if(size[a]<size[b])swap(a,b);
+	parent[b] = a;
+	size[a]+=size[b];
+	nodecount[a]+=nodecount[b];
+	edgecount[a]+=edgecount[b];
+}
+
+void solve(){
+	int n,k;cin>>n>>k;
+	for(int i=0;i<n;i++){
+		make(i+1);
+	}
+	while(k--){
+		int u,v;cin>>u>>v;
+		unionn(u,v);
+	}
+	int ans = 0;
+	for(int i=0;i<n;i++){
+		int x = i+1;
+		if(x==find(x)){
+			int ec = edgecount[x];
+			int nc = nodecount[x];
+			int res = nc*(nc-1)/2;
+			if(res==ec)ans++;
+		}
+	}
+	cout<<ans<<endl;
+	// cout<<cc<<endl;
+}
+
+
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int test=1;
+    cin>>test;
+    // int tt = 1;
+    while(test--){
+    	// cout<<"Case #"<<tt<<": ";
+    	solve();
+    	// tt++;
+    }
+}
