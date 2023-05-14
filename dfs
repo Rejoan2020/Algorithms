@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long int ll;
+#define nl "\n";
+const int mod = 998244353;
+
+// void dfs(int vartex){
+// 	vis[vartex] = true;
+// 	for(auto child:graph[vartex]){
+// 		if(vis[vartex])return;
+// 		dfs(child);
+// 	}
+// }
+
+void dfs(vector<vector<int>>&matrix,vector<vector<int>>&vis,int val,int i,int j,int &sum){
+	int n = matrix.size();
+	int m = matrix[0].size();
+
+	if(i<0 || j<0 || i>=n || j>=m || vis[i][j] || matrix[i][j]==0)return;
+
+	vis[i][j] = true;
+	sum+=matrix[i][j];
+
+	dfs(matrix,vis,val,i+1,j,sum);
+	dfs(matrix,vis,val,i,j+1,sum);
+	dfs(matrix,vis,val,i-1,j,sum);
+	dfs(matrix,vis,val,i,j-1,sum);
+}
+
+void solve(){
+	int n,m;cin>>n>>m;
+	vector<vector<int>> matrix;
+	vector<vector<int>> vis;
+
+	for(int i=0;i<n;i++){
+		vector<int> tmv,tvis;
+		for(int j=0;j<m;j++){
+			int x;cin>>x;
+			tmv.push_back(x);
+			tvis.push_back(false);
+		}
+		matrix.push_back(tmv);
+		vis.push_back(tvis); tvis.clear();
+		tmv.clear();
+	}
+	// cout<<matrix[0][0]<<endl;
+	int res = 0;
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			if(vis[i][j]==false){
+				int ans = 0;
+				dfs(matrix,vis,matrix[i][j],i,j,ans);
+				res = max(ans,res);
+			}
+		}
+	}
+	cout<<res<<nl;
+}
+
+
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int test=1;
+    cin>>test;
+    // int tt = 1;
+    while(test--){
+    	// cout<<"Case #"<<tt<<": ";
+    	solve();
+    	// tt++;
+    }
+}
