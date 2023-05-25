@@ -4,14 +4,6 @@ typedef long long int ll;
 #define nl "\n";
 const int mod = 998244353;
 
-// void dfs(int vartex){
-// 	vis[vartex] = true;
-// 	for(auto child:graph[vartex]){
-// 		if(vis[vartex])return;
-// 		dfs(child);
-// 	}
-// }
-
 void dfs(vector<vector<int>>&matrix,vector<vector<int>>&vis,int val,int i,int j,int &sum){
 	int n = matrix.size();
 	int m = matrix[0].size();
