@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define nl '\n';
+const int mod = 1000000007;
+const int N = 1e5+5;
+const int inf = 1e9+10;
+
+vector<int> g[N];
+vector<int> level(N,inf);
+vector<int> vis(N,false);
+vector<int> parent(N,-1);
+bool cycle = false;
+
+
+void bfs(){
+	queue<int> q;
+	q.push(1);
+	level[1] = 0;
+	vis[1] = true;
+
+	while(!q.empty()){
+		int vartex = q.front();
+		q.pop();
+		vis[vartex] = true;
+		for(int child : g[vartex]){
+			if(!vis[child]){
+				level[child] = level[vartex] + 1;
+				parent[child] = vartex;
+				q.push(child);
+			}
+			else if(parent[vartex]!=child){
+				cycle = true;
+				return;
+			}
+		}
+	}
+}
+
+void solve(){
+	int n,m;cin>>n>>m;
+	for(int i=0;i<m;i++){
+		int x,y;cin>>x>>y;
+		g[x].push_back(y);
+		g[y].push_back(x);
+	}
+	bfs();
+	if(cycle)cout<<"YES"<<endl;
+	else cout<<"NO"<<endl;
+}
+
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int test=1;
+    // memset(level,0,sizeof(level));
+    // cin>>test;
+    // int tt = 1;
+    cycle = false;
+    while(test--){
+        // cout<<"Case #"<<tt<<": ";
+        solve();
+        // tt++;
+    }
+}
