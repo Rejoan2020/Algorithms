@@ -1,0 +1,62 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define nl '\n';
+const int mod = 1000000007;
+const int N = 1e5+5;
+const int inf = 1e9+10;
+
+vector<pair<int,int> > g[N];
+vector<int> level(N,inf);
+
+
+int bfs(int n){
+	deque<int> q;
+	q.push_back(1);
+	level[1] = 0;
+
+	while(!q.empty()){
+		int vartex = q.front();
+		q.pop_front();
+		for(auto child : g[vartex]){
+			int nod = child.first;
+			int wt = child.second;
+			if(level[vartex]+wt<level[nod]){
+				level[nod] = level[vartex]+wt;
+				if(wt==1){
+					q.push_back(nod);
+				}
+				else {q.push_front(nod);}
+			}
+		}
+	}
+	return level[n]==inf? -1: level[n];
+}
+
+void solve(){
+	int vertices,edges;cin>>vertices>>edges;
+	for(int i=0;i<edges;i++){
+		int x;cin>>x;
+		int y;cin>>y;
+		if(x==y)continue;
+		g[x].push_back({y,0});
+		g[y].push_back({x,1});
+	}
+	int ans = bfs(vertices);
+	cout<<ans<<endl;
+}
+
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int test=1;
+    // memset(level,0,sizeof(level));
+    // cin>>test;
+    // int tt = 1;
+    while(test--){
+        // cout<<"Case #"<<tt<<": ";
+        solve();
+        // tt++;
+    }
+}
