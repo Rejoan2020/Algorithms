@@ -1,0 +1,67 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int mod = 998244353;
+
+const int N = 2e5+10;
+set<int> g[N];
+vector<int> vis(N,0);
+
+void dfs(int vartex,int par,bool& cycle){
+	vis[vartex] = 1;
+	for(auto child : g[vartex]){
+		if(par==child)continue;
+		if(vis[child]==2)continue;
+		if(vis[child]==1){
+			cycle=true;
+			return;
+		}
+		dfs(child,vartex,cycle);
+	}
+	vis[vartex] = 2;
+	return;
+}
+
+void solve(){
+	int n;cin>>n;
+	int cnt = 0;
+	for(int i=0;i<=n;i++){
+		g[i].clear();
+		vis[i] = 0;
+	}
+
+	for(int i=0;i<n;i++){
+		int x;cin>>x;
+		g[i+1].insert(x);
+		g[x].insert(i+1);
+	}
+	int loop = 0;
+	for(int i=1;i<=n;i++){
+		if(vis[i]!=0)continue;
+		bool cycle = false;
+		dfs(i,-1,cycle);
+		if(cycle)loop++;
+		cnt++;
+		// for(int i=0;i<=n;i++){
+		// 	cout<<vis[i]<<" ";
+		// }
+		// cout<<endl;
+	}
+	// cout<<loop<<endl;
+	cout<<(cnt>loop?loop+1:loop)<<" "<<cnt<<endl;
+}
+
+
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int test=1;
+    cin>>test;
+    // int tt = 1;
+    while(test--){
+    	// cout<<"Case #"<<tt<<": ";
+    	solve();
+    	// tt++;
+    }
+}
