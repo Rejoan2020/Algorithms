@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+using namespace std;
+// using namespace std::chrono; 
+// #include <ext/pb_ds/assoc_container.hpp>
+// #include <ext/pb_ds/tree_policy.hpp>
+// using namespace __gnu_pbds;
+
+using ll = long long; 
+
+class segmentTree{
+public:
+    vector<int> seg;
+    segmentTree(int n){
+        seg.resize(4*n+1);
+    }
+    void build(int ind, int low,int high,int arr[]){
+        // cout<<low<< " "<<high<<endl;
+        if(low==high){
+            seg[ind] = arr[low];
+            return;
+        }
+        int mid = (low+high)/2;
+        build(2*ind+1,low,mid,arr);
+        build(2*ind+2,mid+1,high,arr);
+        seg[ind] = min(seg[2*ind+1],seg[2*ind+2]);
+    }
+
+    int query(int ind,int low,int high,int l,int r, int arr[]){
+        if(r<low || l>high)return INT_MAX;
+        if(low>=l && high<=r)return seg[ind];
+
+        int mid = (low+high)>>1;
+        int left = query(2*ind+1,low,mid,l,r,arr);
+        int right = query(2*ind+2,mid+1,high,l,r,arr);
+        return min(left,right);
+    }
+
+    void update(int ind,int low,int high,int i,int val){
+        if(low==high){
+            seg[ind] = val;
+            return;
+        }
+        int mid = (low+high)/2;
+        if(mid>=i){
+            update(ind*2+1,low,mid,i,val);
+        }
+        else update(ind*2+2,mid+1,high,i,val);
+        seg[ind] = min(seg[ind*2+1],seg[ind*2+2]);
+    }
+};
+
+
+
+void solve() {
+    int n;cin>>n;
+    int a[n];
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+    }
+    segmentTree sgt = segmentTree(n);
+    sgt.build(0,0,n-1,a);
+    sgt.update(0,0,n-1,0,-4);
+    int x = sgt.query(0,0,n-1,0,4,a);
+    cout<<x<<endl;
+}   
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int testcase=1;
+    // cin>>testcase;
+    int tst = 1;
+    while(testcase--){
+        // cout<<"Case "<<tst<<": ";
+        solve();
+        // tst++;
+    }
+
+}
